@@ -4,7 +4,7 @@ Small internal cheat I made because I was bored. Not perfect by any means and ug
 If you encounter a **CHEAT** related issues, please open an issue.
 ## Usage
 ### *Precompiled*
-1. Go to https://github.com/juvoy/churchill-hook/releases/tag/v1.0 and download the dll
+1. Go to https://github.com/juvoy/churchill-hook/releases/ and download the dll
 2. Download an dll injector (for example [xen0s injector](https://github.com/DarthTon/Xenos), or Process Hacker 2)
 3. Add dll and select process, then inject it. 
 
