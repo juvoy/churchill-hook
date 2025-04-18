@@ -138,8 +138,14 @@ bool Hooks::init(Menu* menu)
 	{
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
 		{
-			kiero::bind(8, (void**)&oPresent, hPresent);
-			init = true;
+			if (kiero::bind(8, (void**)&oPresent, hPresent) == kiero::Status::Success) {
+				init = true;
+			}
+			else {
+				init = false;
+				break;
+			}
+
 		}
 	} while (!init);
 

@@ -16,6 +16,10 @@ Cheat::~Cheat()
 
 bool Cheat::init()
 {
+    if (FindWindowA(nullptr, "Hearts of Iron (DirectX 11)") == nullptr) { // quickfix
+        return false;
+    }
+
     this->_menu = new Menu();
 
     if (!this->_hooks->init(this->_menu)) {

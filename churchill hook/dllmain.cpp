@@ -18,6 +18,7 @@ VOID CheatEntry(HMODULE hModule) {
     Cheat* cheat = new Cheat();
     if (!cheat->init()) {
         std::cout << "Failed..." << std::endl;
+        MessageBoxA(nullptr, "Failed to inject!\nMake sure your rendering api is Directx 11", "churchillhook.cc", MB_ICONERROR | MB_OK);
         return;
     }
 
