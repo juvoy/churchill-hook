@@ -14,9 +14,6 @@ VOID CheatEntry(HMODULE hModule) {
     freopen_s(&fDummy, "CONOUT$", "w", stdout);
 #endif // _DEBUG
 
-
-
-
     Cheat* cheat = new Cheat();
     if (!cheat->init()) {
         std::cout << "Failed..." << std::endl;

@@ -106,12 +106,6 @@
     <Library Include="libraries\minhook\minhook.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\polar\Downloads\screenshot_world.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="C:\Users\polar\Downloads\screenshot_misc.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="screenshots\screenshot_misc.png">
       <Filter>Resource Files</Filter>
     </Image>

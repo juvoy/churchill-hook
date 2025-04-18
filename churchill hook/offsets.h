@@ -17,4 +17,6 @@ namespace offsets {
 
 		inline uintptr_t pTDebug = 0x80;
 	}
+
+
 }

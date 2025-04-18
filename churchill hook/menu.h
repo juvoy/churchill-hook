@@ -9,5 +9,9 @@ public:
 	//Menu();
 	void init();
 	void show();
+
+	bool IsOpen();
+	void SetOpen(bool open);
 private:
+	bool open;
 };

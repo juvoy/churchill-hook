@@ -10,21 +10,16 @@ inline WNDPROC oWndProc;
 inline ID3D11DeviceContext* pContext = NULL;
 inline ID3D11RenderTargetView* mainRenderTargetView;
 
-uintptr_t baseAddress;
-uintptr_t pInstance;
-uint64_t pData;
-uint64_t pTest;
-static bool open = true;
-
+Menu* pMenu;
 LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	if (uMsg == WM_KEYDOWN && wParam == VK_INSERT)
-		open = !open;
+		pMenu->SetOpen(!pMenu->IsOpen());
 
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		return true;
 
-	if (open)
+	if (pMenu->IsOpen())
 	{
 		switch (uMsg) { // https://learn.microsoft.com/en-us/windows/win32/inputdev/mouse-input-notifications
 		case WM_CAPTURECHANGED:
@@ -70,8 +65,6 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 bool init = false;
-Menu* pMenu;
-
 HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	if (!init)
@@ -115,7 +108,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	if (open) {
+	if (pMenu->IsOpen()) {
 		pMenu->show();
 	}
 
@@ -137,6 +130,7 @@ Hooks::~Hooks()
 
 bool Hooks::init(Menu* menu)
 {
+
 	pMenu = menu;
 
 	bool init = false;

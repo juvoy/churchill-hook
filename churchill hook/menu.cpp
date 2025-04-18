@@ -3,10 +3,12 @@
 
 void Menu::init()
 {
+	this->open = true;
 }
 
 void Menu::show()
 {
+	
 	if (ImGui::Begin("###churchill_hook", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar)) {
 		ImGui::SetWindowSize(ImVec2(500, 300));
 		static uintptr_t baseAddress = reinterpret_cast<uintptr_t>(GetModuleHandleA("hoi4.exe"));
@@ -129,4 +131,14 @@ void Menu::show()
 
 		ImGui::End();
 	}
+}
+
+bool Menu::IsOpen()
+{
+	return this->open;
+}
+
+void Menu::SetOpen(bool open)
+{
+	this->open = open;
 }
