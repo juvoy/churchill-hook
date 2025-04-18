@@ -1,15 +1,25 @@
 # Churchill Hook
-Small internal cheat I made because I was bored. Not perfect by any means and ugly but works well enough. Made for *Countenance v1.16.4.3b29*
+A small internal cheat for Hearts of Iron IV I made because I was bored. Not perfect by any means and ugly, but works well enough. Made for *Countenance v1.16.4.3b29*
+
+You'll need DirectX 11.
 
 If you encounter a **CHEAT** related issues, please open an issue.
+
+## *Libraries used*
+[kiero](https://github.com/Rebzzel/kiero)
+
+[ImGui](https://github.com/ocornut/imgui)
+
+[MinHook](https://https://github.com/TsudaKageyu/minhook)
+
 ## Usage
 ### *Precompiled*
-1. Go to https://github.com/juvoy/churchill-hook/releases/tag/v1.0 and download the dll
-2. Download an dll injector (for example [xen0s injector](https://github.com/DarthTon/Xenos), or Process Hacker 2)
+1. Go to https://github.com/juvoy/churchill-hook/releases/ and download the dll
+2. Download a dll injector (for example [xen0s injector](https://github.com/DarthTon/Xenos), or Process Hacker 2)
 3. Add dll and select process, then inject it. 
 
 ### *Source*
-To compile it yourself you will need:
+To compile it yourself, you will need:
 - Visual Studio 2022 (v143)
 
 1. `git clone https://github.com/juvoy/churchill-hook/`
