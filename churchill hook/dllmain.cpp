@@ -12,6 +12,7 @@ VOID CheatEntry(HMODULE hModule) {
     freopen_s(&fDummy, "CONIN$", "r", stdin);
     freopen_s(&fDummy, "CONOUT$", "w", stderr);
     freopen_s(&fDummy, "CONOUT$", "w", stdout);
+
 #endif // _DEBUG
 
     Cheat* cheat = new Cheat();

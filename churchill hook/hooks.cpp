@@ -65,7 +65,7 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 bool init = false;
-HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
+HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	if (!init)
 	{
@@ -99,9 +99,10 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			pMenu->init();
 			init = true;
 		}
-
-		else
+		else 
 			return oPresent(pSwapChain, SyncInterval, Flags);
+		
+
 	}
 
 	ImGui_ImplDX11_NewFrame();
@@ -130,7 +131,6 @@ Hooks::~Hooks()
 
 bool Hooks::init(Menu* menu)
 {
-
 	pMenu = menu;
 
 	bool init = false;
@@ -138,10 +138,11 @@ bool Hooks::init(Menu* menu)
 	{
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
 		{
-			kiero::bind(8, (void**)&oPresent, hkPresent);
+			kiero::bind(8, (void**)&oPresent, hPresent);
 			init = true;
 		}
 	} while (!init);
+
 
 
     return init;
