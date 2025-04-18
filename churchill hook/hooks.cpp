@@ -141,11 +141,6 @@ bool Hooks::init(Menu* menu)
 			if (kiero::bind(8, (void**)&oPresent, hPresent) == kiero::Status::Success) {
 				init = true;
 			}
-			else {
-				init = false;
-				break;
-			}
-
 		}
 	} while (!init);
 
