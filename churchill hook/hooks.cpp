@@ -1,8 +1,5 @@
 #include "hooks.h"
 
-
-
-
 inline Present oPresent;
 inline HWND window = NULL;
 inline WNDPROC oWndProc;
@@ -63,6 +60,8 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 	return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
+
+
 
 bool init = false;
 HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
@@ -127,6 +126,7 @@ Hooks::~Hooks()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
 }
 
 bool Hooks::init(Menu* menu)
@@ -144,7 +144,7 @@ bool Hooks::init(Menu* menu)
 		}
 	} while (!init);
 
-
+	std::cout << "All hooks were initialized successfully" << std::endl;
 
     return init;
 }

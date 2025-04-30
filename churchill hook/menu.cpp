@@ -60,6 +60,10 @@ void Menu::show()
 			if (ImGui::Button("Misc", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
 				page = 1;
 			}
+
+			/*if (ImGui::Button("Network", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
+				page = 2;
+			}*/
 			ImGui::EndChild();
 		}
 
@@ -122,6 +126,11 @@ void Menu::show()
 						*(int*)pAllowTraits = allowTraits;
 					}
 				}
+			}
+			else if (page == 2) {
+				/*ImGui::Checkbox("Custom Steam Name", &bCustomSteam);
+				
+				ImGui::InputText("Steam Name", steamName, IM_ARRAYSIZE(steamName));*/
 			}
 
 			ImGui::EndChild();

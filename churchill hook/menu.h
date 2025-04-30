@@ -1,5 +1,7 @@
 #pragma once
+/*extern bool bCustomSteam = false;
 
+extern char steamName[256] = "";*/
 #include "framework.h"
 
 #include "offsets.h"
