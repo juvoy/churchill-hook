@@ -10,7 +10,7 @@ If you encounter a **CHEAT** related issues, please open an issue.
 
 [ImGui](https://github.com/ocornut/imgui)
 
-[MinHook](https://https://github.com/TsudaKageyu/minhook)
+[MinHook](https://github.com/TsudaKageyu/minhook)
 
 ## Usage
 ### *Precompiled*
