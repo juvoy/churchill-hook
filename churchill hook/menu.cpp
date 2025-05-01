@@ -1,47 +1,20 @@
-#include "menu.h"
-
+#include "framework.h"
 
 void Menu::init()
 {
 	this->open = true;
+
+	this->initialized = true;
 }
 
 void Menu::show()
 {
-	
 	if (ImGui::Begin("###churchill_hook", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar)) {
 		ImGui::SetWindowSize(ImVec2(500, 300));
 		static uintptr_t baseAddress = reinterpret_cast<uintptr_t>(GetModuleHandleA("hoi4.exe"));
 
 		bool bInGame = *reinterpret_cast<bool*>(baseAddress + offsets::bInGame);
-
 		static uintptr_t pInstance = baseAddress + offsets::game::pInstance;
-
-		/*static std::string version;
-		uintptr_t pInstance2 = baseAddress + 0x02EA77B0;
-		uint64_t* pFirst = reinterpret_cast<uint64_t*>(pInstance2);
-		if (pFirst != nullptr) {
-			std::cout << "0x" << std::hex << pFirst << std::dec << std::endl;
-		}
-		pFirst = reinterpret_cast<uint64_t*>((*reinterpret_cast<uint64_t*>(pFirst)) + 0x130); // CPdxNewDeleteAllocator
-		if (pFirst != nullptr) {
-			std::cout << "0x" << std::hex << pFirst << std::dec << std::endl;
-		}
-		pFirst = reinterpret_cast<uint64_t*>((*reinterpret_cast<uint64_t*>(pFirst)) + 0x38); // I Guess Steam
-		if (pFirst != nullptr) {
-			std::cout << "0x" << std::hex << pFirst << std::dec << std::endl;
-		}
-		pFirst = reinterpret_cast<uint64_t*>((*reinterpret_cast<uint64_t*>(pFirst)) + 0x188); // IDK
-		if (pFirst != nullptr) {
-			std::cout << "0x" << std::hex << pFirst << std::dec << std::endl;
-		}
-		pFirst = reinterpret_cast<uint64_t*>((*reinterpret_cast<uint64_t*>(pFirst)) + 0x0);
-		if (pFirst != nullptr) {
-			std::cout << "0x" << std::hex << pFirst << std::dec << std::endl;
-
-			version = reinterpret_cast<char*>(pFirst);
-			std::cout << version << std::endl;
-		}*/
 
 
 		//ImGui::PushFont(SemiBoldItalic);
@@ -61,9 +34,9 @@ void Menu::show()
 				page = 1;
 			}
 
-			/*if (ImGui::Button("Network", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
+			if (ImGui::Button("Network", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
 				page = 2;
-			}*/
+			}
 			ImGui::EndChild();
 		}
 
@@ -82,10 +55,7 @@ void Menu::show()
 				static int iLastId;
 
 
-				ImGui::Text("Current ID: %i", countryId);
-				ImGui::SameLine();
-				ImGui::Text(" | Last ID: %i", iLastId);
-
+				ImGui::Text("Current ID: %i | Last ID: %i", countryId, iLastId);
 
 				static char newId[256] = {};
 				ImGui::Text("New ID: ");
@@ -103,34 +73,48 @@ void Menu::show()
 					}
 				}
 
-				static bool bTdebug = 0;
-				if (ImGui::Button(bTdebug == 0 ? "Enable tdebug" : "Disable tdebug")) {
+
+				if (ImGui::Button(!config->bTdebug ? "Enable tdebug" : "Disable tdebug")) {
 					if (bInGame) {
 						static uintptr_t pDebugStuff = baseAddress + offsets::debug::pDebug;
 						uintptr_t* test = reinterpret_cast<uintptr_t*>((*reinterpret_cast<uint64_t*>(pDebugStuff)) + offsets::debug::pTDebug);
 
-						bTdebug = !bTdebug;
+						config->bTdebug = !config->bTdebug;
 
-						*(int*)test = bTdebug;
+						*(int*)test = config->bTdebug;
 					}
 				}
 			}
 			else if (page == 1) {
-				static bool allowTraits = 0;
-
-
-				if (ImGui::Checkbox("Allow Traits", &allowTraits)) {
+				if (ImGui::Checkbox("Allow Traits", &config->bAllowTraits)) {
 					if (bInGame) {
 						uintptr_t pAllowTraits = baseAddress + offsets::bAllowTraits;
 
-						*(int*)pAllowTraits = allowTraits;
+						*(int*)pAllowTraits = config->bAllowTraits;
 					}
 				}
 			}
 			else if (page == 2) {
-				/*ImGui::Checkbox("Custom Steam Name", &bCustomSteam);
-				
-				ImGui::InputText("Steam Name", steamName, IM_ARRAYSIZE(steamName));*/
+				if (ImGui::BeginChild("###Networking_Steam", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y / 2), ImGuiChildFlags_Borders)) {
+					ImGui::Checkbox("Custom Steam Name", &config->bCustomSteam);
+
+					ImGui::Text("Steam Name: ");
+					ImGui::SameLine();
+					ImGui::InputText("###SteamName", config->steamName, IM_ARRAYSIZE(config->steamName));
+
+					ImGui::EndChild();
+				}
+
+				if (ImGui::BeginChild("###Networking_Paradox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), ImGuiChildFlags_Borders)) {
+					ImGui::Checkbox("Custom InGame Name", &config->bCustomIngame);
+
+					ImGui::Text("Ingame Name: ");
+					ImGui::SameLine();
+					ImGui::InputText("###IngameName", config->ingamename, IM_ARRAYSIZE(config->ingamename));
+
+					ImGui::EndChild();
+				}
+
 			}
 
 			ImGui::EndChild();
@@ -150,4 +134,14 @@ bool Menu::IsOpen()
 void Menu::SetOpen(bool open)
 {
 	this->open = open;
+}
+
+bool Menu::IsInitialized()
+{
+	return this->initialized;
+}
+
+void Menu::SetInitialized(bool init)
+{
+	this->initialized = init;
 }

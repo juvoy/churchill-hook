@@ -1,10 +1,8 @@
 #pragma once
-/*extern bool bCustomSteam = false;
 
-extern char steamName[256] = "";*/
 #include "framework.h"
 
-#include "offsets.h"
+
 
 class Menu {
 public:
@@ -14,6 +12,9 @@ public:
 
 	bool IsOpen();
 	void SetOpen(bool open);
+
+	bool IsInitialized();
+	void SetInitialized(bool init);
 private:
-	bool open;
+	bool open, initialized;
 };

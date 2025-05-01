@@ -1,6 +1,4 @@
 #pragma once
-#include "hooks.h"
-#include "menu.h"
 
 class Cheat {
 public:

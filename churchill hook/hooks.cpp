@@ -1,12 +1,6 @@
-#include "hooks.h"
+﻿#include "framework.h"
 
-inline Present oPresent;
-inline HWND window = NULL;
 inline WNDPROC oWndProc;
-
-inline ID3D11DeviceContext* pContext = NULL;
-inline ID3D11RenderTargetView* mainRenderTargetView;
-
 Menu* pMenu;
 LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
@@ -61,12 +55,33 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
+typedef void(__fastcall* AddPlayerCommand)(void*);
+AddPlayerCommand oAddPlayerCommand = nullptr;
+
+void __fastcall hAddPlayer(void* pCAddPlayerCommand)
+{
+	uint64_t* pSteamName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x30);
+	uint64_t* pIngameName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x50);
+	if (pSteamName && config->bCustomSteam)
+	{
+		memcpy(pSteamName, config->steamName, strlen(config->steamName) + 1);
+	}
+
+	if (pIngameName && config->bCustomIngame) {
+		*pIngameName = (uint64_t)config->ingamename;
+	}
+	oAddPlayerCommand(pCAddPlayerCommand);
+}
 
 
-bool init = false;
+inline ID3D11DeviceContext* pContext = NULL;
+inline ID3D11RenderTargetView* mainRenderTargetView;
+inline Hooks::Present oPresent;
+inline HWND window = NULL;
+
 HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
-	if (!init)
+	if (!pMenu->IsInitialized())
 	{
 		ID3D11Device* pDevice = NULL;
 		if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
@@ -96,7 +111,6 @@ HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT F
 			ImGui_ImplDX11_Init(pDevice, pContext);
 
 			pMenu->init();
-			init = true;
 		}
 		else 
 			return oPresent(pSwapChain, SyncInterval, Flags);
@@ -107,6 +121,7 @@ HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT F
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
 
 	if (pMenu->IsOpen()) {
 		pMenu->show();
@@ -127,6 +142,8 @@ Hooks::~Hooks()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
+	uintptr_t hMod = (uintptr_t)GetModuleHandleA("hoi4.exe");
+	MH_DisableHook((void*)((uintptr_t)hMod + 0x1708B60));
 }
 
 bool Hooks::init(Menu* menu)
@@ -134,15 +151,23 @@ bool Hooks::init(Menu* menu)
 	pMenu = menu;
 
 	bool init = false;
-	do
-	{
+	while (!init) {
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
 		{
 			if (kiero::bind(8, (void**)&oPresent, hPresent) == kiero::Status::Success) {
 				init = true;
 			}
 		}
-	} while (!init);
+	}
+
+	HMODULE hMod = GetModuleHandleA("hoi4.exe");
+	void* target = (void*)((uintptr_t)hMod + 0x1708B60);
+
+	if (MH_CreateHook(target, &hAddPlayer, reinterpret_cast<void**>(&oAddPlayerCommand)) != MH_OK)
+		std::cout << "Failed hook" << std::endl;
+
+	if (MH_EnableHook(target) != MH_OK)
+		std::cout << "Failed enable" << std::endl;
 
 	std::cout << "All hooks were initialized successfully" << std::endl;
 

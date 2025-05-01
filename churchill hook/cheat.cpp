@@ -1,10 +1,11 @@
-#include "cheat.h"
+#include "framework.h"
 
 
 Cheat::Cheat()
 {
     this->_hooks = new Hooks();
     this->_menu = new Menu();
+    config = new Config();
 }
 
 
@@ -12,6 +13,7 @@ Cheat::~Cheat()
 {
     delete this->_hooks;
     delete this->_menu;
+    delete config;
 }
 
 bool Cheat::init()
