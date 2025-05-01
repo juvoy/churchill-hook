@@ -31,3 +31,5 @@ To compile it yourself, you will need:
 ![world section screenshot](https://github.com/juvoy/churchill-hook/blob/master/churchill%20hook/screenshots/screenshot_world.png)
 
 ![misc section screenshot](https://github.com/juvoy/churchill-hook/blob/master/churchill%20hook/screenshots/screenshot_misc.png)
+
+![network section screenshot](https://github.com/juvoy/churchill-hook/blob/master/churchill%20hook/screenshots/screenshot_network.png)
