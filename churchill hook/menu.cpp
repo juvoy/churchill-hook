@@ -1,5 +1,10 @@
 #include "framework.h"
 
+Menu::Menu(Config* config)
+{
+	this->config = config;
+}
+
 void Menu::init()
 {
 	this->open = true;

@@ -6,7 +6,7 @@
 
 class Menu {
 public:
-	//Menu();
+	Menu(Config* config);
 	void init();
 	void show();
 
@@ -17,4 +17,5 @@ public:
 	void SetInitialized(bool init);
 private:
 	bool open, initialized;
+	Config* config;
 };

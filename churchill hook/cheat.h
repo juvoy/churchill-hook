@@ -7,12 +7,14 @@ public:
 
 	bool init();
 
-	Menu* getMenu();
+	Menu* GetMenu();
+	Config* GetConfig();
+
+	static Cheat* GetInstance();
 private:
-
-
 	Hooks* _hooks;
 	Menu* _menu;
-};
+	Config* _config;
 
-static Cheat* cheat = nullptr;
+	static Cheat* instance;
+};

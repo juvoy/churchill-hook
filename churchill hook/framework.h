@@ -20,7 +20,6 @@
 
 
 #include "config.h"
-Config* config;
 
 #include "offsets.h"
 

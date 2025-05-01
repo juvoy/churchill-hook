@@ -1,11 +1,15 @@
 #include "framework.h"
 
+Cheat* Cheat::instance = nullptr;
 
 Cheat::Cheat()
 {
     this->_hooks = new Hooks();
-    this->_menu = new Menu();
-    config = new Config();
+    this->_config = new Config();
+
+    this->_menu = new Menu(this->_config);
+
+    Cheat::instance = this;
 }
 
 
@@ -13,7 +17,7 @@ Cheat::~Cheat()
 {
     delete this->_hooks;
     delete this->_menu;
-    delete config;
+    delete this->_config;
 }
 
 bool Cheat::init()
@@ -21,8 +25,6 @@ bool Cheat::init()
     if (FindWindowA(nullptr, "Hearts of Iron IV (DirectX 11)") == nullptr) { // quickfix
         return false;
     }
-
-    this->_menu = new Menu();
 
     if (!this->_hooks->init(this->_menu)) {
         std::cout << "Failed Hooking" << std::endl;
@@ -32,9 +34,19 @@ bool Cheat::init()
     return true;
 }
 
-Menu* Cheat::getMenu()
+Menu* Cheat::GetMenu()
 {
     return this->_menu;
+}
+
+Config* Cheat::GetConfig()
+{
+    return this->_config;
+}
+
+Cheat* Cheat::GetInstance()
+{
+    return Cheat::instance;
 }
 
 
