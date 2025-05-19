@@ -1,5 +1,5 @@
 # Churchill Hook
-A small internal cheat for Hearts of Iron IV I made because I was bored. Not perfect by any means and ugly, but works well enough. Made for *Countenance v1.16.5.e690*
+A small internal cheat for Hearts of Iron IV I made because I was bored. Not perfect by any means and ugly, but works well enough. Made for *Countenance v1.16.6.ea80 (679e) (S)*
 
 You'll need DirectX 11.
 
