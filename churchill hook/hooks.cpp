@@ -68,6 +68,7 @@ void __fastcall hAddPlayer(void* pCAddPlayerCommand)
 	}
 
 	if (pIngameName && config->bCustomIngame) {
+
 		char* name = _strdup(config->ingamename);
 		*pIngameName = (uint64_t)name;
 	}
