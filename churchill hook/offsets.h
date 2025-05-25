@@ -4,7 +4,7 @@
 namespace offsets {
 	inline uintptr_t bInGame = 0x2EDBCF4;
 	inline uintptr_t bAllowTraits = 0x2ED29F8;
-	inline uintptr_t fAddPlayerCommand = 0x1714250;
+	inline uintptr_t fAddPlayerCommand = 0x17142A0;
 
 	namespace game {
 		inline uintptr_t pInstance = 0x2ED26A8;

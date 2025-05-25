@@ -67,11 +67,12 @@ void __fastcall hAddPlayer(void* pCAddPlayerCommand)
 		memcpy(pSteamName, config->steamName, strlen(config->steamName) + 1);
 	}
 
+	/*
 	if (pIngameName && config->bCustomIngame) {
 
 		char* name = _strdup(config->ingamename);
 		*pIngameName = (uint64_t)name;
-	}
+	}*/
 	oAddPlayerCommand(pCAddPlayerCommand);
 }
 
