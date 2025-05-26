@@ -81,6 +81,9 @@ void Menu::show()
 						catch (std::exception& e) {
 							MessageBoxA(nullptr, "Please only input numbers!", "churchill.cc", MB_ICONERROR | MB_OK);
 						}
+						catch (std::invalid_argument& e) {
+							MessageBoxA(nullptr, "Please only input numbers!", "churchill.cc", MB_ICONERROR | MB_OK);
+						}
 					}
 				}
 
