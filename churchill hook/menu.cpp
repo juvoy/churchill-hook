@@ -74,7 +74,13 @@ void Menu::show()
 					if (bInGame) {
 						iLastId = countryId;
 
-						*(int*)pCountryId = std::stoi(newId);
+						try {
+							int idConverted = std::stoi(newId);
+							*(int*)pCountryId = idConverted;
+						}
+						catch (std::exception& e) {
+							MessageBoxA(nullptr, "Please only input numbers!", "churchill.cc", MB_ICONERROR | MB_OK);
+						}
 					}
 				}
 
