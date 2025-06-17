@@ -1,5 +1,7 @@
 ﻿#include "framework.h"
 
+#include <string.h>
+
 inline WNDPROC oWndProc;
 LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	Menu* menu = Cheat::GetInstance()->GetMenu();
@@ -54,6 +56,7 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
+
 typedef void(__fastcall* AddPlayerCommand)(void*);
 AddPlayerCommand oAddPlayerCommand = nullptr;
 
@@ -61,18 +64,17 @@ void __fastcall hAddPlayer(void* pCAddPlayerCommand)
 {
 	Config* config = Cheat::GetInstance()->GetConfig();
 	uint64_t* pSteamName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x30);
-	uint64_t* pIngameName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x50);
+	uint64_t* pIngameName = (uint64_t*)((uint8_t*)((uint8_t*)pCAddPlayerCommand + 0x50) + 0x0);
 	if (pSteamName && config->bCustomSteam)
 	{
 		memcpy(pSteamName, config->steamName, strlen(config->steamName) + 1);
 	}
 
-	/*
-	if (pIngameName && config->bCustomIngame) {
-
-		char* name = _strdup(config->ingamename);
-		*pIngameName = (uint64_t)name;
+	
+	/*if (pIngameName && config->bCustomIngame) {
+		std::cout << pIngameName << std::endl;
 	}*/
+
 	oAddPlayerCommand(pCAddPlayerCommand);
 }
 

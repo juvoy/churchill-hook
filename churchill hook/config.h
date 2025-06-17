@@ -7,9 +7,12 @@ public:
     bool bCustomIngame = false;
     bool bAllowTraits = false;
     bool bTdebug = false;
+    bool watermark = false;
 
     char steamName[256];
     char ingamename[256];
+
+
 
     Config() {
         steamName[0] = '\0';
