@@ -10,6 +10,7 @@ void Menu::init()
 	this->open = true;
 
 	this->initialized = true;
+	
 }
 
 void Menu::show()
@@ -121,14 +122,14 @@ void Menu::show()
 
 				
 				if (ImGui::BeginChild("###Networking_Paradox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), ImGuiChildFlags_Borders)) {
-					ImGui::Text("Custom Ingamename removed until I fix the crash :c");
+					//ImGui::Text("Custom Ingamename removed until I fix the crash :c");
 					
-					/*ImGui::Checkbox("Custom InGame Name", &config->bCustomIngame);
+					ImGui::Checkbox("Custom InGame Name", &config->bCustomIngame);
 
 
 					ImGui::Text("Ingame Name: ");
 					ImGui::SameLine();
-					ImGui::InputText("###IngameName", config->ingamename, IM_ARRAYSIZE(config->ingamename));*/
+					ImGui::InputText("###IngameName", config->ingamename, IM_ARRAYSIZE(config->ingamename));
 					
 					ImGui::EndChild();
 				}

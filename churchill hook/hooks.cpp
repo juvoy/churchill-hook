@@ -64,16 +64,21 @@ void __fastcall hAddPlayer(void* pCAddPlayerCommand)
 {
 	Config* config = Cheat::GetInstance()->GetConfig();
 	uint64_t* pSteamName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x30);
-	uint64_t* pIngameName = (uint64_t*)((uint8_t*)((uint8_t*)pCAddPlayerCommand + 0x50) + 0x0);
+	uintptr_t pIngameName = (uintptr_t)pCAddPlayerCommand + 0x50;
 	if (pSteamName && config->bCustomSteam)
 	{
 		memcpy(pSteamName, config->steamName, strlen(config->steamName) + 1);
 	}
 
-	
-	/*if (pIngameName && config->bCustomIngame) {
-		std::cout << pIngameName << std::endl;
-	}*/
+	constexpr size_t MAX_NAME_LEN = 32;
+	if (pIngameName && config->bCustomIngame) {
+		char* ingameNamePtr = *(char**)(pIngameName);
+		if (ingameNamePtr) {
+			strncpy_s(ingameNamePtr, 32, config->ingamename, 32 - 1);
+
+			ingameNamePtr[MAX_NAME_LEN - 1] = '\0';
+		}
+	}
 
 	oAddPlayerCommand(pCAddPlayerCommand);
 }
@@ -116,6 +121,8 @@ HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT F
 
 			ImGui_ImplWin32_Init(window);
 			ImGui_ImplDX11_Init(pDevice, pContext);
+
+			ImGui::StyleColorsDark();
 
 			menu->init();
 		}
