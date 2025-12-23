@@ -1,8 +1,7 @@
 #include "framework.h"
 
-Menu::Menu(Config* config)
+Menu::Menu(Config* config) : config(config), initialized(false), open(false)
 {
-	this->config = config;
 }
 
 void Menu::init()
@@ -20,7 +19,7 @@ void Menu::show()
 		static uintptr_t baseAddress = reinterpret_cast<uintptr_t>(GetModuleHandleA("hoi4.exe"));
 
 		bool bInGame = *reinterpret_cast<bool*>(baseAddress + offsets::bInGame);
-		static uintptr_t pInstance = baseAddress + offsets::game::pInstance;
+		static uintptr_t pInstance = baseAddress + offsets::game::pCurrentGameState;
 
 
 		//ImGui::PushFont(SemiBoldItalic);
@@ -32,19 +31,18 @@ void Menu::show()
 		//ImGui::PushFont(SemiBold);
 		static int page = 0;
 		if (ImGui::BeginChild("Selection", ImVec2(ImGui::GetContentRegionAvail().x / 4, ImGui::GetContentRegionAvail().y), ImGuiChildFlags_Borders)) {
-			if (ImGui::Button("World", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
+			if (ImGui::Button(page == 0 ? "> World" : "World", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
 				page = 0;
 			}
-
-			if (ImGui::Button("Misc", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
+			if (ImGui::Button(page == 1 ? "> Misc" : "Misc", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
 				page = 1;
 			}
-
-			if (ImGui::Button("Network", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
+			if (ImGui::Button(page == 2 ? "> Network" : "Network", ImVec2(ImGui::GetContentRegionAvail().x, 35))) {
 				page = 2;
 			}
 			ImGui::EndChild();
 		}
+
 
 		ImGui::SameLine();
 		//ImGui::PopFont();
@@ -79,10 +77,7 @@ void Menu::show()
 							int idConverted = std::stoi(newId);
 							*(int*)pCountryId = idConverted;
 						}
-						catch (std::exception& e) {
-							MessageBoxA(nullptr, "Please only input numbers!", "churchill.cc", MB_ICONERROR | MB_OK);
-						}
-						catch (std::invalid_argument& e) {
+						catch (std::exception&) {
 							MessageBoxA(nullptr, "Please only input numbers!", "churchill.cc", MB_ICONERROR | MB_OK);
 						}
 					}
@@ -133,8 +128,6 @@ void Menu::show()
 					
 					ImGui::EndChild();
 				}
-				
-
 			}
 
 			ImGui::EndChild();

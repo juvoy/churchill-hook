@@ -63,8 +63,8 @@ AddPlayerCommand oAddPlayerCommand = nullptr;
 void __fastcall hAddPlayer(void* pCAddPlayerCommand)
 {
 	Config* config = Cheat::GetInstance()->GetConfig();
-	uint64_t* pSteamName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x30);
-	uintptr_t pIngameName = (uintptr_t)pCAddPlayerCommand + 0x50;
+	uint64_t* pSteamName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x28);
+	uintptr_t pIngameName = (uintptr_t)pCAddPlayerCommand + 0x48;
 	if (pSteamName && config->bCustomSteam)
 	{
 		memcpy(pSteamName, config->steamName, strlen(config->steamName) + 1);
