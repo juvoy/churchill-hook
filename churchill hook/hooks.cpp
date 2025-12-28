@@ -2,6 +2,8 @@
 
 #include <string.h>
 
+#include "misc/pattern.h"
+
 inline WNDPROC oWndProc;
 LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	Menu* menu = Cheat::GetInstance()->GetMenu();
@@ -56,15 +58,16 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
+typedef char(__fastcall* AddPlayerCommandFn)(__int64 a1, __int64 a2);
+AddPlayerCommandFn oAddPlayerCustom = nullptr;
 
-typedef void(__fastcall* AddPlayerCommand)(void*);
-AddPlayerCommand oAddPlayerCommand = nullptr;
 
-void __fastcall hAddPlayer(void* pCAddPlayerCommand)
+
+char hAddPlayerCustom(__int64 a1, __int64 a2)
 {
 	Config* config = Cheat::GetInstance()->GetConfig();
-	uint64_t* pSteamName = (uint64_t*)((uint8_t*)pCAddPlayerCommand + 0x28);
-	uintptr_t pIngameName = (uintptr_t)pCAddPlayerCommand + 0x48;
+	uint64_t* pSteamName = (uint64_t*)((uint8_t*)a1 + 0x28);
+	uintptr_t pIngameName = (uintptr_t)a1 + 0x48;
 	if (pSteamName && config->bCustomSteam)
 	{
 		memcpy(pSteamName, config->steamName, strlen(config->steamName) + 1);
@@ -80,15 +83,16 @@ void __fastcall hAddPlayer(void* pCAddPlayerCommand)
 		}
 	}
 
-	oAddPlayerCommand(pCAddPlayerCommand);
+	return oAddPlayerCustom(a1, a2);
 }
-
 
 inline ID3D11DeviceContext* pContext = NULL;
 inline ID3D11RenderTargetView* mainRenderTargetView;
 inline Hooks::Present oPresent;
 inline HWND window = NULL;
 
+
+static float dpi = 1.f;
 HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	Menu* menu = Cheat::GetInstance()->GetMenu();
@@ -128,14 +132,41 @@ HRESULT __stdcall hPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT F
 		}
 		else 
 			return oPresent(pSwapChain, SyncInterval, Flags);
-		
-
 	}
+
+	if (dpi != Cheat::GetInstance()->GetConfig()->dpi)
+	{
+		dpi = Cheat::GetInstance()->GetConfig()->dpi;
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		io.Fonts->Clear(); 
+
+		ImFontConfig cfg;
+		cfg.SizePixels = 13.0f * dpi;
+		cfg.OversampleH = 1;
+		cfg.OversampleV = 1;
+		cfg.PixelSnapH = true;
+
+		io.Fonts->AddFontDefault(&cfg);
+		io.Fonts->Build();
+
+		ImGui_ImplDX11_InvalidateDeviceObjects();
+		ImGui_ImplDX11_CreateDeviceObjects();
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		style = ImGuiStyle();
+		style.ScaleAllSizes(dpi);
+	}
+
+
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
 
+
+
+	ImGui::NewFrame();
 
 	if (menu->IsOpen()) {
 		menu->show();
@@ -156,9 +187,10 @@ Hooks::~Hooks()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	uintptr_t hMod = (uintptr_t)GetModuleHandleA("hoi4.exe");
-	MH_DisableHook((void*)(hMod + offsets::fAddPlayerCommand));
+
+	MH_DisableHook(MH_ALL_HOOKS);
 }
+
 
 bool Hooks::init(Menu* menu)
 {
@@ -171,15 +203,14 @@ bool Hooks::init(Menu* menu)
 			}
 		}
 	}
+	// 00 00 00 00 00 F0 53 9C F7 7F 00 00 D0 E9 62 46
+	void* target = pattern::Scan(GetModuleHandleA("hoi4.exe"), "48 8B C4 48 89 58 10 48 89 70 18 48 89 78 20 55 48 8D 68 A1 48 81 EC E0 00 00 00");
 
-	uintptr_t hMod = (uintptr_t)GetModuleHandleA("hoi4.exe");
-	void* target = (void*)(hMod + offsets::fAddPlayerCommand);
 
-	if (MH_CreateHook(target, &hAddPlayer, reinterpret_cast<void**>(&oAddPlayerCommand)) != MH_OK) {
+	if (MH_CreateHook(target, &hAddPlayerCustom, reinterpret_cast<void**>(&oAddPlayerCustom)) != MH_OK) {
 		std::cout << "Failed hook AddPlayerCommand" << std::endl;
 		return 0;
 	}
-
 
 	if (MH_EnableHook(target) != MH_OK) {
 		std::cout << "Failed enable all hooks" << std::endl;

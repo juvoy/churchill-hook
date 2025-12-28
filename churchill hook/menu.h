@@ -2,7 +2,7 @@
 
 #include "framework.h"
 
-
+#include <string.h>
 
 class Menu {
 public:
@@ -18,4 +18,12 @@ public:
 private:
 	bool open, initialized;
 	Config* config;
+
+	enum Page {
+		WORLD,
+		MISC,
+		NETWORK,
+		DEBUG,
+	} page;
+
 };

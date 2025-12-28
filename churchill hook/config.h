@@ -12,7 +12,7 @@ public:
     char steamName[256];
     char ingamename[256];
 
-
+    float dpi = 1.f;
 
     Config() {
         steamName[0] = '\0';

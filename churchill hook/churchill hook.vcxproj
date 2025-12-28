@@ -171,6 +171,7 @@
     <ClInclude Include="libraries\kiero\kiero.h" />
     <ClInclude Include="libraries\minhook\MinHook.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="misc\pattern.h" />
     <ClInclude Include="offsets.h" />
     <ClInclude Include="src\buffer.h" />
     <ClInclude Include="src\hde\hde32.h" />
