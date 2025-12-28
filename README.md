@@ -1,5 +1,5 @@
 # Churchill Hook
-A small internal cheat for Hearts of Iron IV I made because I was bored. Not perfect by any means and ugly, but works well enough. Made for *Countenance v1.16.9.8bdd (c09b) (S)*
+A small internal cheat for Hearts of Iron IV I made because I was bored. Not perfect by any means and ugly, but works well enough. Made for *Musketeer v1.17.3.0.3a95*
 
 You'll need DirectX 11.
 
@@ -20,7 +20,7 @@ If you encounter a **CHEAT** related issues, please open an issue.
 
 ### *Source*
 To compile it yourself, you will need:
-- Visual Studio 2022 (v143)
+- Visual Studio (v145)
 
 1. `git clone https://github.com/juvoy/churchill-hook.git`
 2. Open in visual studio
